@@ -1,0 +1,36 @@
+services:
+  gateway:
+    build: .
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-development-secret-change-me-123456}
+      REDIS_ADDR: redis:6379
+      ROUTES_JSON: '[{"prefix":"/api","upstream":"http://upstream:9000"}]'
+      ROLE_LIMITS_JSON: '{"admin":1000,"user":10}'
+    ports:
+      - "8080:8080"
+    depends_on:
+      redis:
+        condition: service_healthy
+      upstream:
+        condition: service_started
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 1s
+      retries: 20
+
+  upstream:
+    image: golang:1.26-alpine
+    working_dir: /src
+    command: ["go", "run", "./cmd/upstream"]
+    volumes:
+      - .:/src:ro
