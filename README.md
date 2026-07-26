@@ -17,7 +17,7 @@
 - как увидеть latency, ошибки и trace конкретного запроса;
 - как система ведёт себя, когда Redis или upstream недоступен.
 
-Эот репозиторий даёт предметный разговор про concurrency, Redis Lua, JWT, HTTP transport, graceful shutdown, failure modes, метрики и CI.
+На собеседовании этот репозиторий даёт предметный разговор про concurrency, Redis Lua, JWT, HTTP transport, graceful shutdown, failure modes, метрики и CI.
 
 > Rate limiting защищает application layer от чрезмерного трафика. Это не замена CDN, WAF или сетевой DDoS-защите.
 
